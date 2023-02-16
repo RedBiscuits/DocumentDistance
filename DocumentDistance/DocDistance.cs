@@ -1,211 +1,191 @@
-﻿using System;
+﻿/*
+ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ ||||||||||||||||||             This code belongs to Yousef A. ELkammar (RedBiscuits@Github).   
+ ||||||||||||||||||             Any access to this code is forbiden but for Algorithm AAD staff.
+ ||||||||||||||||||                     Happy debugging :)
+ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ */
+
+
+/*
+ * 
+ * 
+ * 
+                                        **********                                               **********                       
+                                    ******************                                       ******************
+                                  **********************                                   **********************
+                                 *******  ******  *******                                 *******  ******  *******
+                                **************************                               **************************
+                                **************************                               **************************
+                                **************************                               **************************
+                                *****   **********   *****                               *****   **********   *****
+                                 *****   ********   *****                                 *****   ********   *****
+                                 ******            ******                                 ******            ******
+                                  **********************                                   **********************
+                                    ******************                                       ******************
+                                        **********                                               **********
+ * 
+ * 
+ * 
+ * 
+ * */
+
+
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace DocumentDistance
 {
-
-
-
-    /*
     class DocDistance
     {
+      // Tryed to make an Async function but couldn't   
+    //    private static object objectlock = new object();
 
+        // main func
         public static double CalculateDistance(string doc1FilePath, string doc2FilePath)
         {
-            string document1 = File.ReadAllText(doc1FilePath).ToLower();
-            string document2 = File.ReadAllText(doc2FilePath).ToLower();
+            //reading files from paths
+            string kammar1 = File.ReadAllText(doc1FilePath).ToLower();
+            string kammar2 = File.ReadAllText(doc2FilePath).ToLower();
 
-            double distance = CalculateDocumentDistance(document1, document2);
+            
+            // caling another fun to seperate concerns
+            double kammar3 = Calculatekammar16kammar3(kammar1, kammar2);
 
-            return distance;
+            
+            
+            // clearing docs for memory improvs
+            kammar1 = "";
+            kammar2 = "";
+
+
+            // reslt
+            return kammar3;
         }
 
-        static double CalculateDocumentDistance(string document1, string document2)
+        static double Calculatekammar16kammar3(string kammar1, string kammar2)
         {
-            Dictionary<string, double> wordFrequency1 = GetWordFrequency(document1);
-            Dictionary<string, double> wordFrequency2 = GetWordFrequency(document2);
 
-            IEnumerable<string> uniqueWords = wordFrequency1.Keys.Union(wordFrequency2.Keys);
+            // calc frequencies
+            // could be async funs using symaphores critical section protec.
+            Dictionary<string, double> kammar4 = Getkammar19(kammar1);
+            Dictionary<string, double> kammar5 = Getkammar19(kammar2);
 
-            double[] vector1 = new double[uniqueWords.Count()];
-            double[] vector2 = new double[uniqueWords.Count()];
+            //list of distinguish kammar17
+            List<string> kammar6 = new List<string>();
 
-            int index = 0;
-            foreach (string word in uniqueWords)
+            //adding kammar17
+            kammar6.AddRange(kammar4.Keys);
+            kammar6.AddRange(kammar5.Keys);
+            kammar6 = kammar6.Distinct().ToList();
+
+            //vectors for represntation
+            double[] kammar7 = new double[kammar6.Count];
+            double[] kammar8 = new double[kammar6.Count];
+
+
+            //looping to assign count
+            for (int i = 0; i < kammar6.Count; i++)
             {
-                vector1[index] = wordFrequency1.ContainsKey(word) ? Math.Log10(1 + wordFrequency1[word]) : 0;
-                vector2[index] = wordFrequency2.ContainsKey(word) ? Math.Log10(1 + wordFrequency2[word]) : 0;
-                index++;
+                if (kammar4.TryGetValue(kammar6[i], out double count1))
+                {
+                    kammar7[i] = count1;
+                }
+                if (kammar5.TryGetValue(kammar6[i], out double count2))
+                {
+                    kammar8[i] = count2;
+                }
             }
 
-            double dotProduct = 0.0;
-            double magnitude1 = 0.0;
-            double magnitude2 = 0.0;
+            // dot and cross products
+            double kammar9 = 0.0;
+            double kammar10 = 0.0;
+            double kammar11 = 0.0;
 
-            for (int i = 0; i < vector1.Length; i++)
+            // calcing what above
+            for (int i = 0; i < kammar7.Length; i++)
             {
-                dotProduct += vector1[i] * vector2[i];
-                magnitude1 += vector1[i] * vector1[i];
-                magnitude2 += vector2[i] * vector2[i];
+                kammar9 += kammar7[i] * kammar8[i];
+                kammar10 += kammar7[i] * kammar7[i];
+                kammar11 += kammar8[i] * kammar8[i];
             }
 
-            magnitude1 = Math.Sqrt(magnitude1);
-            magnitude2 = Math.Sqrt(magnitude2);
+            //doneminator
+            kammar10 = Math.Sqrt(kammar10 * kammar11);
+           
 
-            double cosineSimilarity = dotProduct / (magnitude1 * magnitude2) + 0.0;
-            double radians = Math.Acos(cosineSimilarity);
-            double degrees = radians * 180 / Math.PI;
+            // angle calc
+            const double kammar12 = 0.0;
+            double kammar13 = kammar9 / ((kammar10 ) + kammar12);
+            double kammar14 = Math.Acos(kammar13);
+            double degrees = kammar14 * 180 / Math.PI;
 
+            // clear dics for mem
+            kammar4.Clear();
+            kammar5.Clear();
+            // ret res
             return degrees;
         }
 
-        static Dictionary<string, double> GetWordFrequency(string document)
+        static Dictionary<string, double> Getkammar19(string kammar16)
         {
-            document = document.ToLower();
-            document = Regex.Replace(document, @"[^\w\s\]", "");
+            //handling uppercase letters
+            kammar16 = kammar16.ToLower();
 
-            string[] words = document.Split(' ');
+            //list of kammar17
+            // would be better if we use StringBuilder but
+            // it gets me a NaN value as i can't access what is in it
+            var kammar17 = new List<string>();
+            var kammar18 = "";
 
-           
-
-            Dictionary<string, double> wordFrequency = new Dictionary<string, double>();
-            foreach (string word in words)
+            // looping at everychar
+            foreach (char c in kammar16)
             {
-
-                if (wordFrequency.ContainsKey(word))
-                {
-                    wordFrequency[word]++;
-                }
-                else
-                {
-                    wordFrequency[word] = 1;
-                }
-            }
-
-            return wordFrequency;
-        }
-    }
-    */
-
-    
-    class DocDistance
-    {
-        private static object objectlock = new object();
-
-        public static double CalculateDistance(string doc1FilePath, string doc2FilePath)
-        {
-            string document1 = File.ReadAllText(doc1FilePath).ToLower();
-            string document2 = File.ReadAllText(doc2FilePath).ToLower();
-
-            double distance = CalculateDocumentDistance(document1, document2);
-
-            document1 = "";
-            document2 = "";
-
-
-            return distance;
-        }
-
-        static double CalculateDocumentDistance(string document1, string document2)
-        {
-            Dictionary<string, double> wordFrequency1 = GetWordFrequency(document1);
-            Dictionary<string, double> wordFrequency2 = GetWordFrequency(document2);
-
-            List<string> uniqueWordsList = new List<string>();
-            uniqueWordsList.AddRange(wordFrequency1.Keys);
-            uniqueWordsList.AddRange(wordFrequency2.Keys);
-            uniqueWordsList = uniqueWordsList.Distinct().ToList();
-
-            double[] vector1 = new double[uniqueWordsList.Count];
-            double[] vector2 = new double[uniqueWordsList.Count];
-
-            for (int i = 0; i < uniqueWordsList.Count; i++)
-            {
-                if (wordFrequency1.TryGetValue(uniqueWordsList[i], out double count1))
-                {
-                    vector1[i] = count1;
-                }
-                if (wordFrequency2.TryGetValue(uniqueWordsList[i], out double count2))
-                {
-                    vector2[i] = count2;
-                }
-            }
-
-            double dotProduct = 0.0;
-            double magnitude1 = 0.0;
-            double magnitude2 = 0.0;
-
-            for (int i = 0; i < vector1.Length; i++)
-            {
-                dotProduct += vector1[i] * vector2[i];
-                magnitude1 += vector1[i] * vector1[i];
-                magnitude2 += vector2[i] * vector2[i];
-            }
-
-            magnitude1 = Math.Sqrt(magnitude1 * magnitude2);
-           
-
-            const double epsilon = 0.0;
-            double cosineSimilarity = dotProduct / ((magnitude1 ) + epsilon);
-            double radians = Math.Acos(cosineSimilarity);
-            double degrees = radians * 180 / Math.PI;
-
-            wordFrequency1.Clear();
-            wordFrequency2.Clear();
-            return degrees;
-        }
-
-        static Dictionary<string, double> GetWordFrequency(string document)
-        {
-            document = document.ToLower();
-            var words = new List<string>();
-            var currentWord = "";
-
-            foreach (char c in document)
-            {
+                //if alhpanumeric
                 if (char.IsLetterOrDigit(c))
                 {
-                    currentWord += c;
+                    kammar18 += c;
                 }
                 else
                 {
-                    if (currentWord != "")
+                    if (kammar18 != "")
                     {
-                        words.Add(currentWord);
-                        currentWord = "";
+                        kammar17.Add(kammar18);
+                        kammar18 = "";
                     }
                 }
             }
-
-            if (currentWord != "")
+            //not empty str
+            if (kammar18 != "")
             {
-                words.Add(currentWord);
+                kammar17.Add(kammar18);
             }
 
-            var wordFrequency = new Dictionary<string, double>();
+            // frequency
+            var kammar19 = new Dictionary<string, double>();
 
-            foreach (string word in words)
+            // calculating frequency arr
+            foreach (string word in kammar17)
             {
-                if (wordFrequency.TryGetValue(word, out double count))
+                if (kammar19.TryGetValue(word, out double count))
                 {
-                    wordFrequency[word] = count + 1;
+                    kammar19[word] = count + 1;
                 }
                 else
                 {
-                    wordFrequency[word] = 1;
+                    kammar19[word] = 1;
                 }
             }
 
-            return wordFrequency;
+            //ret res
+            return kammar19;
         }
+  
+
     }
 
 
 }
-
-
